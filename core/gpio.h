@@ -56,6 +56,11 @@ typedef enum{
 	GPIO_AF15
 }GPIO_alternate_mode;
 
+typedef enum{
+	GPIO_PUSH_PULL,
+	GPIO_OPEN_DRAIN
+}GPIO_output_type;
+
 void gpio_toggle(GPIO_TypeDef *port, uint8_t pin);
 void gpio_write(GPIO_TypeDef *port, uint8_t pin, uint8_t value);
 uint8_t gpio_read(GPIO_TypeDef *port, uint8_t pin);
@@ -65,7 +70,8 @@ void gpio_set_pupd(GPIO_TypeDef *port, uint8_t pin,GPIO_pupd pupd_type);
 uint32_t gpio_read_port(GPIO_TypeDef *port);
 void gpio_lock_mode(GPIO_TypeDef *port, uint8_t pin,GPIO_lock mode);
 void gpio_alternate_function(GPIO_TypeDef *port, uint8_t pin, GPIO_alternate_mode mode);
-
+void gpio_output_type(GPIO_TypeDef *port, uint8_t pin, GPIO_output_type output);
+void gpio_set_port(GPIO_TypeDef *port, uint32_t value);
 
 
 
