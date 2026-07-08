@@ -18,16 +18,26 @@ This is a learning experience for myself and will be done bit by bit and slowly 
 
 ## Future Things Planned on being added
 
--Timer Functions
--Clock Control
--DMA
--Interrupts
--PWM
--ADC
--SPI
--I2C
--CAN
--Add Comments to Code
--Replace Magic Numbers With Register Position Names (ie. 1<<13 => 1<<USART_Enable_Bit)
+*Timer Functions
+
+*Clock Control
+
+*DMA
+
+*Interrupts
+
+*PWM
+
+*ADC
+
+*SPI
+
+*I2C
+
+*CAN
+
+*Add Comments to Code
+
+*Replace Magic Numbers With Register Position Names (ie. 1<<13 => 1<<USART_Enable_Bit)
 
 This is not an exhaustive lsit and others will be added based on personal needs or requests from others
