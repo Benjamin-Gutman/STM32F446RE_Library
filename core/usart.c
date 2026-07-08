@@ -31,7 +31,7 @@ void usart_init(USART_TypeDef *usart, uint32_t baudrate,
 	usart_baud_rate(usart, baudrate);
 	usart -> CR1 |= (0x1 << 2);
 	usart -> CR1 |= (0x1 << 3);
-	usart -> CR1 |= (0x1 << 13);
+	usart_enable(usart);
 }
 
 void usart_oversampling(USART_TypeDef *usart, USART_OVERSAMPLING oversampling_mode){
@@ -75,5 +75,70 @@ void usart_set_RX(USART_TypeDef *usart, GPIO_TypeDef *RX, uint8_t rx_pin){
 	gpio_set_mode(RX, rx_pin, txrx_modes);
 	gpio_input_type(RX,rx_pin, rx_no_pupd);
 }
+
+char usart_read_char(USART_TypeDef *usart){
+	while (!((usart -> SR) & (0x1<<5)));
+
+	return (char)usart -> DR;
+}
+
+void usart_read_string(USART_TypeDef *usart, char* buffer, uint32_t buffer_length){
+	for (int i = 0; i <buffer_length-1; i++){
+		char c = usart_read_char(usart);
+		buffer[i] = c;
+		if ((c == '\n')){
+			buffer[i+1] = '\0';
+			break;
+		}
+		if (c=='\0'){
+			break;
+		}
+	}
+}
+void usart_transmit_char(USART_TypeDef *usart, char c){
+	while (!((usart->SR) & (1<<7)));
+
+	usart->DR =(uint8_t)c;
+}
+
+
+void usart_transmit_string(USART_TypeDef *usart, char *str){
+	int i =1;
+	while (str[i-1] != '\0'){
+		i++;
+	}
+	for (int j = 0; j<i;j++){
+		usart_transmit_char(usart,str[j]);
+	}
+}
+
+void usart_enable(USART_TypeDef *usart)
+{
+    usart->CR1 |= (1<<13);
+}
+
+void usart_disable(USART_TypeDef *usart)
+{
+    usart->CR1 &= ~(1<<13);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

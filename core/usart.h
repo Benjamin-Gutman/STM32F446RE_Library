@@ -75,12 +75,10 @@ void usart_oversampling(USART_TypeDef *usart, USART_OVERSAMPLING oversampling_mo
 
 
 char usart_read_char(USART_TypeDef *usart);
-char usart_read_string(USART_TypeDef *usart);
+void usart_read_string(USART_TypeDef *usart, char* buffer, uint32_t buffer_length);
 
 void usart_transmit_char(USART_TypeDef *usart, char c);
 void usart_transmit_string(USART_TypeDef *usart, char *str);
-
-void usart_data_available();
 
 
 #ifdef __cplusplus
