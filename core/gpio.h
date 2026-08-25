@@ -8,6 +8,9 @@
 extern "C" {
 #endif
 
+// Definitions of important input values to reduce magic numbers for the user of the library
+
+
 #define GPIO_HIGH 1
 #define GPIO_LOW 0
 
@@ -61,11 +64,13 @@ typedef enum{
 	GPIO_OPEN_DRAIN
 }GPIO_output_type;
 
-void gpio_toggle(GPIO_TypeDef *port, uint8_t pin);
-void gpio_write(GPIO_TypeDef *port, uint8_t pin, uint8_t value);
-uint8_t gpio_read(GPIO_TypeDef *port, uint8_t pin);
-void gpio_set_mode(GPIO_TypeDef *port, uint8_t pin, GPIO_mode_def mode);
-void gpio_set_speed(GPIO_TypeDef *port, uint8_t pin, GPIO_speed speed);
+//Function definitions
+
+void gpio_toggle(GPIO_TypeDef *port, uint8_t pin); // Inverts bit from high to low or low to high
+void gpio_write(GPIO_TypeDef *port, uint8_t pin, uint8_t value); //Sends a value output to the pin
+uint8_t gpio_read(GPIO_TypeDef *port, uint8_t pin); // Receives an input from the pin
+void gpio_set_mode(GPIO_TypeDef *port, uint8_t pin, GPIO_mode_def mode); //Decides the mode of the pin using the mode typedef
+void gpio_set_speed(GPIO_TypeDef *port, uint8_t pin, GPIO_speed speed); //
 void gpio_set_pupd(GPIO_TypeDef *port, uint8_t pin,GPIO_pupd pupd_type);
 uint32_t gpio_read_port(GPIO_TypeDef *port);
 void gpio_lock_mode(GPIO_TypeDef *port, uint8_t pin,GPIO_lock mode);

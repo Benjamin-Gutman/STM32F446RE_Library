@@ -80,6 +80,9 @@ void usart_read_string(USART_TypeDef *usart, char* buffer, uint32_t buffer_lengt
 void usart_transmit_char(USART_TypeDef *usart, char c);
 void usart_transmit_string(USART_TypeDef *usart, char *str);
 
+void usart_enable(USART_TypeDef *usart);
+void usart_disable(USART_TypeDef *usart);
+
 
 #ifdef __cplusplus
 }
