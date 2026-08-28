@@ -29,8 +29,8 @@ void usart_init(USART_TypeDef *usart, uint32_t baudrate,
 	usart_set_RX(usart, RX,rx_pin);
 	usart_oversampling(usart, oversampling_mode);
 	usart_baud_rate(usart, baudrate);
-	usart -> CR1 |= (0x1 << 2);
-	usart -> CR1 |= (0x1 << 3);
+	usart -> CR1 |= (0x1 << USART_CR1_RE_Pos);
+	usart -> CR1 |= (0x1 << USART_CR1_TE_Pos);
 	usart_enable(usart);
 }
 
@@ -51,7 +51,7 @@ void usart_baud_rate(USART_TypeDef *usart, uint32_t baudrate){
 	    pclk = APB1_CLOCK;
 	float usartdiv = (float)pclk/(8.0f*(2-over8)*baudrate);
 	usart -> BRR = (0x0);
-	usart -> BRR |= ((uint32_t)usartdiv << 4);
+	usart -> BRR |= ((uint32_t)usartdiv << USART_BRR_DIV_Mantissa_Pos);
 	float fraction = usartdiv - (uint32_t)usartdiv;
 	if (over8 == 1){
 		fraction = fraction * 8.0f + 0.5f;
@@ -77,7 +77,7 @@ void usart_set_RX(USART_TypeDef *usart, GPIO_TypeDef *RX, uint8_t rx_pin){
 }
 
 char usart_read_char(USART_TypeDef *usart){
-	while (!((usart -> SR) & (0x1<<5)));
+	while (!((usart -> SR) & (1<<USART_SR_RXE_Pos)));
 
 	return (char)usart -> DR;
 }
@@ -96,7 +96,7 @@ void usart_read_string(USART_TypeDef *usart, char* buffer, uint32_t buffer_lengt
 	}
 }
 void usart_transmit_char(USART_TypeDef *usart, char c){
-	while (!((usart->SR) & (1<<7)));
+	while (!((usart->SR) & (1<<USART_SR_TXE_Pos)));
 
 	usart->DR =(uint8_t)c;
 }
@@ -114,12 +114,12 @@ void usart_transmit_string(USART_TypeDef *usart, char *str){
 
 void usart_enable(USART_TypeDef *usart)
 {
-    usart->CR1 |= (1<<13);
+    usart->CR1 |= (1<<USART_CR1_UE_Pos));
 }
 
 void usart_disable(USART_TypeDef *usart)
 {
-    usart->CR1 &= ~(1<<13);
+    usart->CR1 &= ~(1<<USART_CR1_UE_Pos);
 }
 
 

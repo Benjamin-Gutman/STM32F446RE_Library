@@ -78,7 +78,32 @@ void gpio_set_port(GPIO_TypeDef *port, uint32_t value){
 }
 
 
-
+void gpio_enable_clock(GPIO_TypeDef *port){
+	if (port == GPIOA){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOAEN_Pos);
+	}
+	else if (port == GPIOB){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOBEN_Pos);
+	}
+	else if (port == GPIOC){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOCEN_Pos);
+	}
+	else if (port == GPIOD){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIODEN_Pos);
+	}
+	else if (port == GPIOE){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOEEN_Pos);
+	}
+	else if (port == GPIOF){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOFEN_Pos);
+	}
+	else if (port == GPIOG){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOGEN_Pos);
+	}
+	else if (port == GPIOH){
+		RCC->AHB1ENR |= (1 << RCC_AHB1ENR_GPIOHEN_Pos);
+	}
+}
 
 
 

@@ -77,6 +77,7 @@ void gpio_lock_mode(GPIO_TypeDef *port, uint8_t pin,GPIO_lock mode);
 void gpio_alternate_function(GPIO_TypeDef *port, uint8_t pin, GPIO_alternate_mode mode);
 void gpio_output_type(GPIO_TypeDef *port, uint8_t pin, GPIO_output_type output);
 void gpio_set_port(GPIO_TypeDef *port, uint32_t value);
+void gpio_enable_clock(GPIO_TypeDef *port);
 
 
 
