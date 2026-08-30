@@ -73,11 +73,11 @@ void usart_set_RX(USART_TypeDef *usart, GPIO_TypeDef *RX, uint8_t rx_pin){
 	GPIO_mode_def txrx_modes = GPIO_ALTERNATE_FUNCTION;
 	GPIO_pupd rx_no_pupd = GPIO_NO_PUPD;
 	gpio_set_mode(RX, rx_pin, txrx_modes);
-	gpio_input_type(RX,rx_pin, rx_no_pupd);
+	gpio_set_pupd(RX,rx_pin, rx_no_pupd);
 }
 
 char usart_read_char(USART_TypeDef *usart){
-	while (!((usart -> SR) & (1<<USART_SR_RXE_Pos)));
+	while (!((usart -> SR) & (1<<USART_SR_RXNE_Pos)));
 
 	return (char)usart -> DR;
 }
@@ -114,7 +114,7 @@ void usart_transmit_string(USART_TypeDef *usart, char *str){
 
 void usart_enable(USART_TypeDef *usart)
 {
-    usart->CR1 |= (1<<USART_CR1_UE_Pos));
+    usart->CR1 |= (1<<USART_CR1_UE_Pos);
 }
 
 void usart_disable(USART_TypeDef *usart)

@@ -32,6 +32,6 @@ void start_timer(TIM_TypeDef* timer){
 }
 
 void stop_timer(TIM_TypeDef* timer){
-	timer -> CR1 &= ~(1<<TIM_CEN_CEN_Pos);
+	timer -> CR1 &= ~(1<<TIM_CR1_CEN_Pos);
 }
 
