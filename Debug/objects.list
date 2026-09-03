@@ -1,0 +1,6 @@
+"./core/adc.o"
+"./core/dma.o"
+"./core/gpio.o"
+"./core/timer.o"
+"./core/usart.o"
+"./library_tests/gpio_test.o"

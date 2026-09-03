@@ -1,7 +1,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "stm32f446xx.h"
+#include "../Drivers/CMSIS/Device/ST/STM32F4XX/Include/stm32f446xx.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -25,11 +25,12 @@ void timer_init(TIM_TypeDef* timer, uint16_t prescaler, uint16_t period);
 void set_timer_prescaler(TIM_TypeDef* timer, uint16_t prescaler);
 void set_timer_auto_reload(TIM_TypeDef* timer, uint16_t reload_value);
 void set_timer_counter(TIM_TypeDef* timer, uint16_t value);
-int16_t get_timer_counter(TIM_TypeDef* timer);
+uint16_t get_timer_counter(TIM_TypeDef* timer);
 
 void start_timer(TIM_TypeDef* timer);
 void stop_timer(TIM_TypeDef* timer);
 
+void timer_enable_clock(TIM_TypeDef* timer);
 
 void set_timer_mode(TimerCounterMode);
 void set_repitition_count();

@@ -1,7 +1,9 @@
-#include 'usart.h'
-#include 'gpio.h'
+#include "usart.h"
+#include "gpio.h"
 
 #define F_CPU 180000000UL
+#define APB1_CLOCK 16000000UL
+#define APB2_CLOCK 90000000UL
 
 void usart_init(USART_TypeDef *usart, uint32_t baudrate,
 		GPIO_TypeDef *TX, uint8_t tx_pin,
@@ -39,41 +41,52 @@ void usart_oversampling(USART_TypeDef *usart, USART_OVERSAMPLING oversampling_mo
 	usart->CR1 |= (oversampling_mode << 15);
 }
 
-void usart_baud_rate(USART_TypeDef *usart, uint32_t baudrate){
-	uint32_t over8 = usart->CR1;
-	over8 = over8>>15;
-	over8 &= 0x1;
-	uint32_t pclk;
+void usart_baud_rate(USART_TypeDef *usart, uint32_t baudrate)
+{
+    uint32_t pclk;
 
-	if (usart == USART1 || usart == USART6)
-	    pclk = APB2_CLOCK;
-	else
-	    pclk = APB1_CLOCK;
-	float usartdiv = (float)pclk/(8.0f*(2-over8)*baudrate);
-	usart -> BRR = (0x0);
-	usart -> BRR |= ((uint32_t)usartdiv << USART_BRR_DIV_Mantissa_Pos);
-	float fraction = usartdiv - (uint32_t)usartdiv;
-	if (over8 == 1){
-		fraction = fraction * 8.0f + 0.5f;
-	}
-	else{
-		fraction = fraction * 16.0f + 0.5f;
-	}
-	usart -> BRR |= ((uint16_t)fraction);
+    if (usart == USART1 || usart == USART6)
+        pclk = APB2_CLOCK;
+    else
+        pclk = APB1_CLOCK;
+
+    if ((usart->CR1 & USART_CR1_OVER8) == 0)
+    {
+        // 16x oversampling
+        usart->BRR = (pclk + (baudrate / 2)) / baudrate;
+    }
+    else
+    {
+        // 8x oversampling
+        uint32_t usartdiv = (2 * pclk + (baudrate / 2)) / baudrate;
+
+        usart->BRR = (usartdiv & 0xFFF0)
+                   | ((usartdiv & 0x000F) >> 1);
+    }
 }
 
-void usart_set_TX(USART_TypeDef *usart, GPIO_TypeDef *TX, uint8_t tx_pin){
-	GPIO_mode_def txrx_modes = GPIO_ALTERNATE_FUNCTION;
-	GPIO_output_type tx_push_pull = GPIO_PUSH_PULL;
-	gpio_set_mode(TX, tx_pin, txrx_modes);
-	gpio_output_type(TX, tx_pin, tx_push_pull);
+void usart_set_TX(USART_TypeDef *usart, GPIO_TypeDef *TX, uint8_t tx_pin)
+{
+    gpio_enable_clock(TX);
+
+    GPIO_mode_def txrx_modes = GPIO_ALTERNATE_FUNCTION;
+    GPIO_output_type tx_push_pull = GPIO_PUSH_PULL;
+
+    gpio_set_mode(TX, tx_pin, txrx_modes);
+    gpio_output_type(TX, tx_pin, tx_push_pull);
+    gpio_alternate_function(TX, tx_pin, GPIO_AF7);
 }
 
-void usart_set_RX(USART_TypeDef *usart, GPIO_TypeDef *RX, uint8_t rx_pin){
-	GPIO_mode_def txrx_modes = GPIO_ALTERNATE_FUNCTION;
-	GPIO_pupd rx_no_pupd = GPIO_NO_PUPD;
-	gpio_set_mode(RX, rx_pin, txrx_modes);
-	gpio_set_pupd(RX,rx_pin, rx_no_pupd);
+void usart_set_RX(USART_TypeDef *usart, GPIO_TypeDef *RX, uint8_t rx_pin)
+{
+    gpio_enable_clock(RX);
+
+    GPIO_mode_def txrx_modes = GPIO_ALTERNATE_FUNCTION;
+    GPIO_pupd rx_no_pupd = GPIO_NO_PUPD;
+
+    gpio_set_mode(RX, rx_pin, txrx_modes);
+    gpio_set_pupd(RX, rx_pin, rx_no_pupd);
+    gpio_alternate_function(RX, rx_pin, GPIO_AF7);
 }
 
 char usart_read_char(USART_TypeDef *usart){

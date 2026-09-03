@@ -1,5 +1,5 @@
-#include 'adc.h'
-#include 'gpio.h'
+#include "adc.h"
+#include "gpio.h"
 
 void adc_init(ADC_TypeDef* adc,GPIO_TypeDef *port, uint8_t pin, ADC_Channel channel){
 
@@ -19,7 +19,7 @@ void adc_init(ADC_TypeDef* adc,GPIO_TypeDef *port, uint8_t pin, ADC_Channel chan
 		RCC->APB2ENR |= (1 << RCC_APB2ENR_ADC3EN_Pos);
 	}
 
-	adc -> CR2 &= ~(1 << ADON);
+	adc -> CR2 &= ~(1 <<ADC_CR2_ADON_Pos);
 
 	adc_set_resolution(adc, ADC_RESOLUTION_12BIT);
 
@@ -31,14 +31,14 @@ void adc_init(ADC_TypeDef* adc,GPIO_TypeDef *port, uint8_t pin, ADC_Channel chan
 
 	adc_set_sample_time(adc, channel, ADC_SAMPLE_15_CYCLES);
 
-	adc -> CR2 |= (1 << ADC_CR2_ADON_Pos)
+	adc -> CR2 |= (1 << ADC_CR2_ADON_Pos);
 }
 
-void adc_set_resolution(ADC_TypeDef *adc, ADC_resolution resolution){
+void adc_set_resolution(ADC_TypeDef *adc, ADC_Resolution resolution){
 
-	adc->CR1 &= ~(1 << RES);
+	adc->CR1 &= ~(1 << ADC_CR1_RES_Pos);
 
-	adc->CR1 &= ~(1 << (RES + 1));
+	adc->CR1 &= ~(1 << (ADC_CR1_RES_Pos + 1));
 
     switch (resolution){
         case ADC_RESOLUTION_12BIT:
@@ -67,7 +67,7 @@ void adc_set_resolution(ADC_TypeDef *adc, ADC_resolution resolution){
     }
 }
 
-void adc_set_channel(ADC_TypeDef *adc, ADC_channel channel){
+void adc_set_channel(ADC_TypeDef *adc, ADC_Channel channel){
 
     adc->SQR3 &= ~(1 << ADC_SQR3_SQ1_Pos);
     adc->SQR3 &= ~(1 << (ADC_SQR3_SQ1_Pos + 1));
@@ -83,7 +83,7 @@ void adc_set_channel(ADC_TypeDef *adc, ADC_channel channel){
     adc->SQR1 &= ~(1 << (ADC_SQR1_L_Pos + 3));
 }
 
-void adc_set_sample_time(ADC_TypeDef *adc, ADC_channel channel, ADC_sample_time sample_time){
+void adc_set_sample_time(ADC_TypeDef *adc, ADC_Channel channel, ADC_SampleTime sample_time){
 
 	uint32_t shift;
 
@@ -116,7 +116,7 @@ void adc_start(ADC_TypeDef *adc)
 
 uint16_t adc_read(ADC_TypeDef *adc)
 {
-    while (!(adc->SR & (1 << ADC_SR_EOC_Pos))
+    while (!(adc->SR & (1 << ADC_SR_EOC_Pos)))
     {
         // Wait for conversion to finish
     }
@@ -124,6 +124,11 @@ uint16_t adc_read(ADC_TypeDef *adc)
     return (uint16_t)adc->DR;
 }
 
-
+uint16_t adc_read_channel(ADC_TypeDef *adc, ADC_Channel channel)
+{
+    adc_set_channel(adc, channel);
+    adc_start(adc);
+    return adc_read(adc);
+}
 
 

@@ -1,7 +1,7 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#include "stm32f446xx.h"
+#include "../Drivers/CMSIS/Device/ST/STM32F4XX/Include/stm32f446xx.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -26,7 +26,7 @@ typedef enum{
 	GPIO_MEDIUM_SPEED,
 	GPIO_FAST_SPEED,
 	GPIO_HIGH_SPEED,
-}GPIO_SPEED;
+}GPIO_speed;
 
 typedef enum{
 	GPIO_NO_PUPD,

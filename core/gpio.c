@@ -1,4 +1,5 @@
-#include 'gpio.h'
+#include "gpio.h"
+#include <stdint.h>
 
 
 void gpio_toggle(GPIO_TypeDef *port, uint8_t pin){
@@ -58,9 +59,9 @@ void gpio_alternate_function(GPIO_TypeDef *port, uint8_t pin, GPIO_alternate_mod
 	if ((port -> MODER >> (2*pin) & 0x3) !=0x2){
 		return;
 	}
-	if (pin <8)
+	if (pin <8){
 		port -> AFR[0] &= ~(0xF<<(4*pin));
-		port -> AFR[0] |= (mode<<(4*pin));
+		port -> AFR[0] |= (mode<<(4*pin));}
 	else{
 		port -> AFR[1] &= ~(0xF<<(4*(pin-8)));
 		port -> AFR[1] |= (mode<<(4*(pin-8)));

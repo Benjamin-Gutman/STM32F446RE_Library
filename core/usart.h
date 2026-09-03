@@ -1,7 +1,7 @@
 #ifndef USART_H
 #define USART_H
 
-#include "stm32f446xx.h"
+#include "../Drivers/CMSIS/Device/ST/STM32F4XX/Include/stm32f446xx.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
