@@ -69,6 +69,12 @@ uint16_t adc_read(ADC_TypeDef *adc);
 
 uint16_t adc_read_channel(ADC_TypeDef *adc, ADC_Channel channel);
 
+void adc_enable_dma(ADC_TypeDef *adc);
+
+void adc_enable_continuous(ADC_TypeDef *adc);
+
+void adc_disable_continuous(ADC_TypeDef *adc);
+
 
 
 

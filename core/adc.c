@@ -87,8 +87,7 @@ void adc_set_sample_time(ADC_TypeDef *adc, ADC_Channel channel, ADC_SampleTime s
 
 	uint32_t shift;
 
-    if (channel <= ADC_CHANNEL_9)
-    {
+    if (channel <= ADC_CHANNEL_9){
     	shift = ADC_SMPR2_SMP0_Pos + (channel * 3);
 
         adc->SMPR2 &= ~(1 << shift);
@@ -97,8 +96,7 @@ void adc_set_sample_time(ADC_TypeDef *adc, ADC_Channel channel, ADC_SampleTime s
 
         adc->SMPR2 |= ((uint32_t)sample_time << shift);
     }
-    else
-    {
+    else {
         shift = ADC_SMPR1_SMP10_Pos + ((channel - 10) * 3);
 
         adc->SMPR1 &= ~(1 << shift);
@@ -109,26 +107,36 @@ void adc_set_sample_time(ADC_TypeDef *adc, ADC_Channel channel, ADC_SampleTime s
     }
 }
 
-void adc_start(ADC_TypeDef *adc)
-{
+void adc_start(ADC_TypeDef *adc){
     adc->CR2 |= (1 << ADC_CR2_SWSTART_Pos);
 }
 
-uint16_t adc_read(ADC_TypeDef *adc)
-{
-    while (!(adc->SR & (1 << ADC_SR_EOC_Pos)))
-    {
+uint16_t adc_read(ADC_TypeDef *adc){
+    while (!(adc->SR & (1 << ADC_SR_EOC_Pos))){
         // Wait for conversion to finish
     }
 
     return (uint16_t)adc->DR;
 }
 
-uint16_t adc_read_channel(ADC_TypeDef *adc, ADC_Channel channel)
-{
+uint16_t adc_read_channel(ADC_TypeDef *adc, ADC_Channel channel){
     adc_set_channel(adc, channel);
     adc_start(adc);
     return adc_read(adc);
 }
 
+void adc_enable_dma(ADC_TypeDef *adc){
 
+    adc->CR2 &= ~(3 << ADC_CR2_DMA_Pos);
+    adc->CR2 |= (1 << ADC_CR2_DMA_Pos);
+
+    adc->CR2 |= (1 << ADC_CR2_DDS_Pos);
+}
+
+void adc_enable_continuous(ADC_TypeDef *adc){
+    adc->CR2 |= (1 << ADC_CR2_CONT_Pos);
+}
+
+void adc_disable_continuous(ADC_TypeDef *adc){
+    adc->CR2 &= ~(1 << ADC_CR2_CONT_Pos);
+}

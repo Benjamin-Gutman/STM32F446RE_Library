@@ -1,7 +1,7 @@
 #ifndef DMA_H
 #define DMA_H
 
-#include "stm32f446xx.h"
+#include "../Drivers/CMSIS/Device/ST/STM32F4XX/Include/stm32f446xx.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -68,6 +68,19 @@ void dma_enable(DMA_TypeDef* dma, uint8_t stream);
 void dma_disable(DMA_TypeDef* dma, uint8_t stream);
 
 uint8_t dma_is_enabled(DMA_TypeDef* dma, uint8_t stream);
+
+
+uint8_t dma_transfer_complete(DMA_TypeDef* dma, uint8_t stream);
+
+uint8_t dma_half_transfer(DMA_TypeDef* dma, uint8_t stream);
+
+uint8_t dma_transfer_error(DMA_TypeDef* dma, uint8_t stream);
+
+void dma_clear_transfer_complete(DMA_TypeDef* dma, uint8_t stream);
+
+void dma_clear_half_transfer(DMA_TypeDef* dma, uint8_t stream);
+
+void dma_clear_transfer_error(DMA_TypeDef* dma, uint8_t stream);
 
 
 #ifdef __cplusplus
