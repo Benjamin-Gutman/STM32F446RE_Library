@@ -28,14 +28,23 @@ typedef enum {
 	DMA_PRIORITY_VERY_HIGH
 } DMA_Priority;
 
-typedef enum {
-	DMA_SINGLE,
-	DMA_INCREMENTAL_BURST
-} DMA_Burst;
+typedef enum{
+	CHANNEL0,
+	CHANNEL1,
+	CHANNEL2,
+	CHANNEL3,
+	CHANNEL4,
+	CHANNEL5,
+	CHANNEL6,
+	CHANNEL7
+
+} DMA_Channel;
+
+static DMA_Stream_TypeDef* dma_get_stream(DMA_TypeDef* dma, uint8_t stream);
 
 void dma_init(DMA_TypeDef* dma, uint8_t stream);
 
-void dma_set_channel(DMA_TypeDef* dma, uint8_t stream, uint8_t channel);
+void dma_set_channel(DMA_TypeDef* dma, uint8_t stream, DMA_Channel channel);
 
 void dma_set_address(DMA_TypeDef* dma, uint8_t stream, uint32_t peripheral_address, uint32_t memory_address);
 
@@ -43,7 +52,7 @@ void dma_set_transfer_length(DMA_TypeDef* dma, uint8_t stream, uint16_t length);
 
 void dma_set_direction(DMA_TypeDef* dma, uint8_t stream, DMA_Direction direction);
 
-void dma_set_data_size(DMA_TypeDef* dma, uint8_t stream, DMA_DataSize peripheral_size, DMA_DataSize size);
+void dma_set_data_size(DMA_TypeDef* dma, uint8_t stream, DMA_DataSize peripheral_size, DMA_DataSize memory_size);
 
 void dma_enable_memory_increment(DMA_TypeDef* dma, uint8_t stream);
 
